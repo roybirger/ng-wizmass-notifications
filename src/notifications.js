@@ -11,14 +11,25 @@ ngWizmassNotifier.service('Notifier', ['Request', 'Aggregation', '$q', function 
 
     var currentNotifications = [];
 
-    this.registerForNotifications = function(token) {
+    var userToken;
+
+    this.setToken = function (token, guid) {
+
+        userToken = {
+            token:    token,
+            user_guid: guid
+        };
+
+    };
+
+    this.registerForNotifications = function() {
 
         var deferred = $q.defer();
 
         Aggregation.clear();
         Request.clearCallbacks();
 
-        Request.registerForNotificationRequest(token).then(function (data){
+        Request.registerForNotificationRequest(userToken).then(function (data){
 
             var notifications = Aggregation.aggregate(data);
 
@@ -31,14 +42,14 @@ ngWizmassNotifier.service('Notifier', ['Request', 'Aggregation', '$q', function 
         return deferred.promise;
     };
 
-    this.fetchNotifications = function(token) {
+    this.fetchNotifications = function() {
 
         var deferred = $q.defer();
 
         //Aggregation.clear();
         Request.clearCallbacks();
 
-        Request.fetchNotifications(token).then(function(data) {
+        Request.fetchNotifications(userToken).then(function(data) {
 
             currentNotifications = Aggregation.aggregate(data);
 
@@ -50,11 +61,11 @@ ngWizmassNotifier.service('Notifier', ['Request', 'Aggregation', '$q', function 
 
     };
 
-    this.markAsRead = function (token, notification) {
+    this.markAsRead = function (notification) {
 
         var chain = Aggregation.getAggregatedChainForNotification(notification.aggregatorName, notification.notification_guid);
 
-        return Request.markAsRead(token, chain);
+        return Request.markAsRead(userToken, chain);
 
     };
 

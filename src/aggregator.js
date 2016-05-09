@@ -65,8 +65,6 @@ angular.module('ngWizmassNotifier').factory('Aggregation', function() {
 
         angular.forEach(data,function(notification){
 
-            console.log('processing: ' + notification.comment_guid);
-
             var handled = false;
 
             angular.forEach(aggregators, function(aggregator){
@@ -79,7 +77,6 @@ angular.module('ngWizmassNotifier').factory('Aggregation', function() {
 
             if (!handled) {
                 //error...
-                console.log('no aggregator for notification'. notification.notification_guid);
                 //notifications.push(notification);
             }
 
