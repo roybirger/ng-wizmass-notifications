@@ -14,7 +14,7 @@ angular.module('ngWizmassNotifier').factory('ConnectionService', ['$q', '$rootSc
     var ws = new WebSocket('ws://dev4.wizmass.com:8080/');
 
     ws.onopen = function(){
-        console.log('Socket has been opened!');
+        //console.log('Socket has been opened!');
     };
 
     ws.onmessage = function(message) {
@@ -29,14 +29,14 @@ angular.module('ngWizmassNotifier').factory('ConnectionService', ['$q', '$rootSc
             cb:defer
         };
         request.callbackId = callbackId;
-        console.log('Sending request', request);
+        //console.log('Sending request', request);
         ws.send(JSON.stringify(request));
         return defer.promise;
     }
 
     function listener(data) {
         var messageObj = data;
-        console.log('Received data from websocket: ', messageObj);
+        //console.log('Received data from websocket: ', messageObj);
         // If an object exists with callbackId in our callbacks object, resolve it
         if(callbacks.hasOwnProperty(messageObj.callbackId)) {
             $rootScope.$apply(callbacks[messageObj.callbackId].cb.resolve(messageObj.data));
